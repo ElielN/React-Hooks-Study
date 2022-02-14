@@ -1,6 +1,5 @@
-//Aula 51 - 26:37
 import P from 'prop-types';
-import { createContext, useContext, useReducer, useRef } from 'react';
+import { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import './App.css';
 
 /* const reducer = (state, action) => {
@@ -20,7 +19,7 @@ import './App.css';
 }; */
 
 // actions.js
-export const actions = {
+/* export const actions = {
   CHANGE_TITLE: 'CHANGE_TITLE',
 };
 
@@ -68,17 +67,50 @@ export const H1 = () => {
       <input type="text" ref={inputRef} />
     </>
   );
+}; */
+const useMyHook = (cb, delay = 1000) => {
+  const savedCb = useRef();
+
+  useEffect(() => {
+    savedCb.current = cb;
+  }, [cb]);
+
+  useEffect(() => {
+    //setInterval nos permite executar uma função ou código em um específico intervalo
+    //Nesse caso, a cada delay segundos é executado a função callback que foi passada
+    //como parâmetro no nosso Hook
+    const interval = setInterval(() => {
+      savedCb.current();
+    }, delay);
+
+    return () => clearInterval(interval); //Limpando lixo
+  }, [delay]);
 };
 
 //O useReduce é igual ao useState mas foi criado para trabalhar com estados complexos
 // App.jsx
 function App() {
+  const [counter, setCounter] = useState(0);
+  const [delay, setDelay] = useState(1000);
+  const [incrementor, setIncrementor] = useState(100);
+
+  useMyHook(() => setCounter((c) => c + 1), delay);
+
   return (
-    <AppContext>
-      <div>
-        <H1 />
-      </div>
-    </AppContext>
+    <div>
+      <h1>Contador: {counter}</h1>
+      <h1>Delay: {delay}</h1>
+      <button
+        onClick={() => {
+          setDelay((d) => d + incrementor);
+        }}
+      >
+        +{incrementor}
+      </button>
+      <button onClick={() => setDelay((d) => d - incrementor)}>-{incrementor}</button>
+      <br />
+      <input type="number" value={incrementor} onChange={(e) => setIncrementor(Number(e.target.value))}></input>
+    </div>
   );
   /* //No useReducer passamos uma função reducer que vai fazer a lógica das actions
   //e um estado inicial
