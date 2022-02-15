@@ -1,15 +1,18 @@
 import { Posts } from '../../components/Posts';
+import { CounterProvider } from '../../contexts/CounterProvider';
 import { PostsProvider } from '../../contexts/PostsProvider';
 import './styles.css';
 
 function App() {
   return (
     // PostsProvider é o post que possui o createContext e irá passar dados para todos os filhos
-    <PostsProvider>
-      <div>
-        <Posts />
-      </div>
-    </PostsProvider>
+    <CounterProvider>
+      <PostsProvider>
+        <div>
+          <Posts />
+        </div>
+      </PostsProvider>
+    </CounterProvider>
   );
 }
 
