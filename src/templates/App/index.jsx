@@ -1,7 +1,19 @@
-import P from 'prop-types';
-import { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
-import './App.css';
+import { Posts } from '../../components/Posts';
+import { PostsProvider } from '../../contexts/PostsProvider';
+import './styles.css';
 
+function App() {
+  return (
+    // PostsProvider é o post que possui o createContext e irá passar dados para todos os filhos
+    <PostsProvider>
+      <div>
+        <Posts />
+      </div>
+    </PostsProvider>
+  );
+}
+
+// --------------- USEREDUCE --------------------
 /* const reducer = (state, action) => {
   switch (action.type) {
     case 'muda': {
@@ -67,8 +79,29 @@ export const H1 = () => {
       <input type="text" ref={inputRef} />
     </>
   );
-}; */
-const useMyHook = (cb, delay = 1000) => {
+};
+
+  //No useReducer passamos uma função reducer que vai fazer a lógica das actions
+  //e um estado inicial
+  const [state, dispatch] = useReducer(reducer, globalState);
+  const { counter, title, body } = state;
+
+  //O dispatch serve pra disparar uma ação, podendo enviar junto um payload que são dados
+  //Como por exemplo durante uma compra em que eu posso mandar os produtos que estão no carrinho
+  return (
+    <div>
+      <h1>
+        {title} {counter}
+      </h1>
+      <button onClick={() => dispatch({ type: 'muda', payload: new Date().toLocaleDateString('pt-BR') })}>Click</button>
+      <button onClick={() => dispatch({ type: 'inverter' })}>Inverte</button>
+    </div>
+  );
+} */
+// --------------- USEREDUCE --------------------
+
+// --------------- CRIANDO NOSSO PRÓPRIO HOOK --------------------
+/* const useMyHook = (cb, delay = 1000) => {
   const savedCb = useRef();
 
   useEffect(() => {
@@ -111,24 +144,10 @@ function App() {
       <br />
       <input type="number" value={incrementor} onChange={(e) => setIncrementor(Number(e.target.value))}></input>
     </div>
-  );
-  /* //No useReducer passamos uma função reducer que vai fazer a lógica das actions
-  //e um estado inicial
-  const [state, dispatch] = useReducer(reducer, globalState);
-  const { counter, title, body } = state;
-
-  //O dispatch serve pra disparar uma ação, podendo enviar junto um payload que são dados
-  //Como por exemplo durante uma compra em que eu posso mandar os produtos que estão no carrinho
-  return (
-    <div>
-      <h1>
-        {title} {counter}
-      </h1>
-      <button onClick={() => dispatch({ type: 'muda', payload: new Date().toLocaleDateString('pt-BR') })}>Click</button>
-      <button onClick={() => dispatch({ type: 'inverter' })}>Inverte</button>
-    </div>
   ); */
-}
+// --------------- CRIANDO NOSSO PRÓPRIO HOOK --------------------
+
+// ----------------- USEREF E USECONTEXT -------------------------
 /* import { Div } from './components/Div';
 import { AppContext } from './contexts/AppContext';
 
@@ -176,6 +195,7 @@ function App() {
     </div>
   );
 };
+// ----------------- USEREF E USECONTEXT -------------------------
 
 Post.propTypes = {
   post: P.shape({
